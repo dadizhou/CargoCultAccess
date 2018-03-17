@@ -15,10 +15,15 @@
         $(document).ready(function () {
 
             var ulLocations = $('#ulLocations');
+            var serverURL = 'https://cargocult.azurewebsites.net';
+            var resourceURL = '/api/location/getalllocations';
+            if (document.URL.startsWith('http://localhost')) {
+                serverURL = 'http://localhost:54342';
+            }
 
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:54342/api/location/getalllocations',
+                url: serverURL + resourceURL,
                 dataType: 'json',
                 success: function (data) {
                     ulLocations.empty();
