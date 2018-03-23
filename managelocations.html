@@ -25,6 +25,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="lib/js/jquery.bootpag.js"></script>
     <script type="text/javascript" src="lib/js/utility.js"></script>
+    <script type="text/javascript" src="lib/js/location.crud.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!--<script src="lib/js/jquery.easyPaginate.js"></script>-->
@@ -63,75 +64,15 @@
     </nav>
     <div>
         <h1 class="inline-header">All Locations</h1>
-        <a href="#" class="btn btn-md btn-primary pull-right btn-float-right">Add New</a>
+        <a href="#" onclick="openEditPage(null)" class="btn btn-md btn-primary pull-right btn-float-right">Add New</a>
     </div>
     <div id="divLocations"></div>
 
-
-    <div id="content">Dynamic Content goes here</div>
     <div id="page-selection">Pagination goes here</div>
     <script>
-        var divLocations = $('#divLocations');
-        var resourceURL = '/api/location/getalllocations';
-        var serverURL = getServerUrl();
 
-        $.ajax({
-            type: 'GET',
-            url: serverURL + resourceURL,
-            dataType: 'json',
-            success: function (data) {
-                divLocations.empty();
-                $.each(data, function (index, val) {
-                    var locDetails =
-                        '<div class="card card-outline-primary m-1 p-1">' +
-                        '<div class="bg-light p-1">' +
-                        '<h4 class="inline-header">' + val.title + '</h4>' +
-                        '<a href="#" class="btn btn-sm btn-danger pull-right btn-float-right">Remove</a>' +
-                        '<a href="#" onclick="editLocation(this.id)" class="btn btn-sm btn-warning pull-right btn-float-right" id="' + val.locationID + '">Edit</a>' +
-                        '</div>' +
-                        '<div class="card-text p-1">' + val.description + '</div>' +
-                        '</div>';
-                    divLocations.append(locDetails);
-                });
-            }
-        });
+        listAllLocations($('#divLocations'), $('#page-selection'));
 
-        function editLocation(locationID) {
-            window.location.href = "editlocation.html?locationid=" + locationID;
-        }
-
-        //// init bootpag
-        //$('#page-selection').bootpag({
-        //    total: 10
-        //}).on("page", function (event, /* page number here */ num) {
-        //    var divLocations = $('#divLocations');
-        //    var serverURL = 'https://cargocult.azurewebsites.net';
-        //    var resourceURL = '/api/location/getalllocations';
-        //    if (document.URL.startsWith('http://localhost')) {
-        //        serverURL = 'http://localhost:54342';
-        //    }
-
-        //    $.ajax({
-        //        type: 'GET',
-        //        url: serverURL + resourceURL,
-        //        dataType: 'json',
-        //        success: function (data) {
-        //            divLocations.empty();
-        //            $.each(data, function (index, val) {
-        //                var locDetails =
-        //                    '<div class="card card-outline-primary m-1 p-1">' +
-        //                    '<div class="bg-light p-1">' +
-        //                    '<h4 class="inline-header">' + val.title + '</h4>' +
-        //                    '<a href="#" class="btn btn-sm btn-danger pull-right btn-float-right">Remove</a>' +
-        //                    '<a href="#" class="btn btn-sm btn-warning pull-right btn-float-right">Edit</a>' +
-        //                    '</div>' +
-        //                    '<div class="card-text p-1">' + val.description + '</div>' +
-        //                    '</div>';
-        //                divLocations.append(locDetails);
-        //            });
-        //        }
-        //    });
-        //});
     </script>
 </body>
 </html>
