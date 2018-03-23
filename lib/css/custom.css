@@ -1,0 +1,11 @@
+﻿.inline-header {
+    margin: 0;
+    display: inline-block;
+}
+
+a.btn-float-right {
+    position: relative;
+    top: 5px;
+    right: 5px;
+    float: right;
+}
