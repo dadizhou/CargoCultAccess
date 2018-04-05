@@ -1,19 +1,27 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Bootstrap CSS -->
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="lib/css/custom.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="lib/js/jquery.bootpag.js"></script>
+    <script type="text/javascript" src="lib/js/utility.js"></script>
+    <script type="text/javascript" src="lib/js/location.crud.js"></script>
+    <script type="text/javascript" src="lib/js/location.search.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <title>CargoCult Access Page</title>
 </head>
-<body>
+<body id="mapBody">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="index.html">CargoCult</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,13 +31,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="index.html">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="managelocations.html">Manage Locations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="searchbyradius.html">Search by Radius</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,6 +50,121 @@
             </ul>
         </div>
     </nav>
-    <h1>Click the links above to navigate</h1>
+
+    <div>
+        <div id="mapControls">
+            <div class="dropright" id="mapSearchByRadius">
+                <button class="btn btn-secondary btn-sm btn-map" type="button" id="dropdownMapSearchByRadius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-search fa-fw"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <form class="px-2 py-2">
+                        <label>Set search radius</label>
+                        <div class="form-group">
+                            <input type="number" step="0.001" class="form-control form-control-sm" name="searchRadius" id="searchRadius" placeholder="Radius (km)">
+                        </div>
+                        <button type="button" id="btnSearchRadius" class="btn btn-outline-success btn-sm float-right">Search</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropright" id="mapForm">
+                <button class="btn btn-secondary btn-sm btn-map" type="button" id="dropdownMapForm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-map-marker fa-fw"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <form class="px-2 py-2">
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="locationName" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="locationDescription" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="locationLatitude" placeholder="Latitude">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="locationLongitude" placeholder="Longitude">
+                        </div>
+                        <button type="button" class="btn btn-outline-success btn-sm float-right" id="btnSaveLocation">Save</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropright" id="mapPostcode">
+                <button class="btn btn-secondary btn-sm btn-map" type="button" id="dropdownMapPostcode" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-crosshairs fa-fw"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <form class="px-2 py-2">
+                        <label>Enter a postcode to set map center</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-sm" id="postcode" placeholder="Postcode">
+                        </div>
+                        <button type="button" class="btn btn-outline-success btn-sm" id="btnSetPostcode">Set</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm float-right" id="btnClearPostcode">Clear</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="googleMap"></div>
+    <script>
+        function myMap() {
+            var btnSearchRadius = document.getElementById('btnSearchRadius');
+            var btnToggleForm = document.getElementById('toggle');
+            var searchRadius = document.getElementById('searchRadius');
+
+            var markers = [];
+            var searchCircle = new google.maps.Circle();
+
+            // initialise map
+            var mapProperties = {
+                zoom: 14,
+                scrollwheel: true,
+                draggable: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                    position: google.maps.ControlPosition.TOP_LEFT
+                }
+            };
+            var map = new google.maps.Map(document.getElementById('googleMap'), mapProperties);
+            var infoWindow = new google.maps.InfoWindow();
+
+            // add buttons to the map
+            var controlsDiv = document.getElementById('mapControls');
+            controlsDiv.index = 1;
+            map.controls[google.maps.ControlPosition.LEFT_CENTER].push(controlsDiv);
+
+            // handle POI click
+            map.addListener('click', function (event) { handlePOI(event, map); });
+
+            // place marker on current location
+            navigator.geolocation.getCurrentPosition(callbackSucces, callbackError, getGeoOption());
+            function callbackSucces(position) {
+                map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                addMarker(map, infoWindow, markers,
+                    'Current Location',
+                    'Current locatoin lat lon',
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+            }
+
+            // handle search by radius event
+            google.maps.event.addDomListener(btnSearchRadius, 'click', function () {
+                deleteMarkers(markers);
+                navigator.geolocation.getCurrentPosition(callbackSucces, callbackError, getGeoOption());
+                function callbackSucces(position) {
+                    map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                    searchByRadius(map, infoWindow, markers, searchCircle, searchRadius.value)
+                }
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMGtyp-NB3OZ5z20vu3J90kkxGYXmdE2w&libraries=places&callback=myMap"></script>
 </body>
 </html>

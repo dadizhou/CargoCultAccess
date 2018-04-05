@@ -9,3 +9,24 @@ a.btn-float-right {
     right: 5px;
     float: right;
 }
+
+body#mapBody {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#googleMap {
+    flex-grow: 1;
+}
+
+.btn-map {
+    height: 40px;
+    width: 40px;
+    margin: 3px 3px 3px 9px;
+    border-radius: 60%;
+}
+
+#mapControls {
+    position: absolute;
+}
