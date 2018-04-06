@@ -112,35 +112,21 @@
     <div id="googleMap"></div>
     <script>
         function myMap() {
-            var btnSearchRadius = document.getElementById('btnSearchRadius');
-            var btnToggleForm = document.getElementById('toggle');
-            var searchRadius = document.getElementById('searchRadius');
-
+            // initialise some useful stuff
+            var pageElements = getPageElements();
             var markers = [];
-            var searchCircle = new google.maps.Circle();
 
             // initialise map
-            var mapProperties = {
-                zoom: 14,
-                scrollwheel: true,
-                draggable: true,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: true,
-                mapTypeControlOptions: {
-                    style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-                    position: google.maps.ControlPosition.TOP_LEFT
-                }
-            };
-            var map = new google.maps.Map(document.getElementById('googleMap'), mapProperties);
+            var mapProperties = getMapProperties();
+            var map = new google.maps.Map(pageElements.googleMap, mapProperties);
             var infoWindow = new google.maps.InfoWindow();
+            var searchCircle = new google.maps.Circle();
 
             // add buttons to the map
-            var controlsDiv = document.getElementById('mapControls');
-            controlsDiv.index = 1;
-            map.controls[google.maps.ControlPosition.LEFT_CENTER].push(controlsDiv);
+            map.controls[google.maps.ControlPosition.LEFT_CENTER].push(pageElements.mapControls);
 
             // handle POI click
-            map.addListener('click', function (event) { handlePOI(event, map); });
+            map.addListener('click', function (event) { handlePOI(event, map, pageElements); });
 
             // place marker on current location
             navigator.geolocation.getCurrentPosition(callbackSucces, callbackError, getGeoOption());
@@ -155,13 +141,18 @@
             }
 
             // handle search by radius event
-            google.maps.event.addDomListener(btnSearchRadius, 'click', function () {
+            google.maps.event.addDomListener(pageElements.btnSearchRadius, 'click', function () {
                 deleteMarkers(markers);
                 navigator.geolocation.getCurrentPosition(callbackSucces, callbackError, getGeoOption());
                 function callbackSucces(position) {
                     map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
-                    searchByRadius(map, infoWindow, markers, searchCircle, searchRadius.value)
+                    searchByRadius(map, infoWindow, markers, searchCircle, pageElements.searchRadius.value)
                 }
+            });
+
+            // handle save location
+            google.maps.event.addDomListener(pageElements.mapControls.mapForm.btnSaveLocation, 'click', function () {
+                if (window.confirm('Save this location?')) { submitSavePOI(pageElements); }
             });
         }
     </script>
