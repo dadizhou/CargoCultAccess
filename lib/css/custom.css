@@ -30,3 +30,14 @@ body#mapBody {
 #mapControls {
     position: absolute;
 }
+
+
+#addressInput {
+    min-width: 240px;
+}
+
+@media screen and (max-width: 320px) {
+    #addressInput {
+        min-width: 200px;
+    }
+}
